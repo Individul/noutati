@@ -5,7 +5,6 @@ import { getArticol } from '@/lib/article';
 import { genereazaSumar } from '@/lib/ai';
 import { timeAgo, dataLunga } from '@/lib/format';
 import { notFound } from 'next/navigation';
-import ArticleRow from '@/components/ArticleRow';
 
 // Build static: subiectele curente devin pagini la fiecare build
 // (GitHub Actions la fiecare 20 min — vezi .github/workflows/).
@@ -29,10 +28,6 @@ export default async function PaginaStire({ params }) {
   const subiecte = await getNews();
   const subiect = subiecte.find((i) => i.id === id);
   if (!subiect) notFound();
-
-  const inrudite = subiecte
-    .filter((i) => i.id !== subiect.id && i.theme === subiect.theme)
-    .slice(0, 4);
 
   return (
     <main className="container">
@@ -78,22 +73,11 @@ export default async function PaginaStire({ params }) {
         </section>
 
         <p className="reader-legal">
-          Sumarul sau fragmentul de mai sus provin din articolele surselor
-          originale, menționate mai jos, afișate aici fără publicitate.
-          Articolele integrale aparțin în totalitate surselor.
+          {ai.ok
+            ? 'Sumarul este generat automat de un sistem AI pe baza articolelor de la sursele de mai jos; articolele integrale aparțin în totalitate surselor originale.'
+            : 'Textul de mai sus este preluat parțial din articolele surselor originale, menționate mai jos; aici apar fără publicitate, pentru o lectură liniștită.'}
         </p>
       </article>
-
-      {inrudite.length > 0 && (
-        <section className="section">
-          <div className="sec-head">
-            <h2>Din aceeași zonă</h2>
-          </div>
-          {inrudite.map((i) => (
-            <ArticleRow key={i.id} item={i} mica showSummary={false} />
-          ))}
-        </section>
-      )}
     </main>
   );
 }
