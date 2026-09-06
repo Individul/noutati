@@ -43,6 +43,7 @@ jobs:
           path: |
             .sumar-cache.json
             .date-corectii.json
+            .text-cache.json
             .pagini-vechi
           key: cache-stiri-${{ github.run_id }}
           restore-keys: |
