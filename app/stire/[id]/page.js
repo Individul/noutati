@@ -71,12 +71,6 @@ export default async function PaginaStire({ params }) {
             </a>
           ))}
         </section>
-
-        <p className="reader-legal">
-          {ai.ok
-            ? 'Sumarul este generat automat de un sistem AI pe baza articolelor de la sursele de mai jos; articolele integrale aparțin în totalitate surselor originale.'
-            : 'Textul de mai sus este preluat parțial din articolele surselor originale, menționate mai jos; aici apar fără publicitate, pentru o lectură liniștită.'}
-        </p>
       </article>
     </main>
   );
@@ -184,6 +178,11 @@ async function SumarSubiect({ subiect }) {
           Subiectul este acoperit de publicațiile de mai jos.
         </div>
       )}
+      <p className="reader-legal">
+        {ai.ok
+          ? 'Sumarul este generat automat de un sistem AI pe baza articolelor de la sursele de mai jos; articolele integrale aparțin în totalitate surselor originale.'
+          : 'Textul de mai sus este preluat parțial din articolele surselor originale, menționate mai jos; aici apar fără publicitate, pentru o lectură liniștită.'}
+      </p>
     </>
   );
 }
