@@ -50,7 +50,9 @@ export default async function Acasa() {
         </div>
       </div>
 
-      {populare && <PanouPopular populare={populare} leadId={lead?.id} />}
+      {populare && (
+        <PanouPopular populare={populare} leadId={lead?.id} leadTitlu={lead?.title} />
+      )}
     </main>
   );
 }

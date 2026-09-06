@@ -9,12 +9,31 @@ const TABURI = [
   { cheie: '30z', label: '30 zile' },
 ];
 
+const normalizeazaTitlu = (s) =>
+  (s || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
 // Panoul din dreapta: subiectele cele mai acoperite (cele mai multe surse)
 // în fereastra de timp selectată. Datele sunt precalculate la build.
-export default function PanouPopular({ populare, leadId }) {
+export default function PanouPopular({ populare, leadId, leadTitlu }) {
   const [activ, setActive] = useState('48h');
+  // lead-ul se exclude temeinic: după id ȘI după titlul normalizat
+  // (id-ul clusterului se poate schimba între builduri)
+  const leadTitluNorm = (leadTitlu || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
   const lista = (populare[activ] || [])
-    .filter((r) => r.id !== leadId)
+    .filter(
+      (r) =>
+        r.id !== leadId &&
+        normalizeazaTitlu(r.titlu) !== leadTitluNorm
+    )
     .slice(0, 8);
 
   return (
