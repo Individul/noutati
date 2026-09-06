@@ -1,7 +1,6 @@
-// Pagina de arhivă pentru un subiect: se servește din baza D1 timp de 1 an,
-// chiar și după ce subiectul iese din știrile curente.
-// Dacă subiectul nu e în arhivă, cererea cade pe fișierele statice
-// (pagina curentă sau 404).
+// Pagina de subiect: întâi pagina statică din buildul curent (subiecte
+// proaspete); doar dacă aceasta nu mai există (subiectul a rotit din știri)
+// se randează din arhiva D1, cu marcajul „din arhivă".
 
 import { timeAgo, dataLunga } from '../../lib/format.js';
 
@@ -9,6 +8,11 @@ export async function onRequest(context) {
   const { request, env, params } = context;
   const id = String(params.id || '');
 
+  // 1. pagina statică din buildul curent, dacă există
+  const staticPage = await env.ASSETS.fetch(request);
+  if (staticPage.status !== 404) return staticPage;
+
+  // 2. subiect rotit → căutăm în arhiva D1
   let rand = null;
   try {
     const { results } = await env.DB.prepare(
@@ -21,7 +25,7 @@ export async function onRequest(context) {
     rand = null;
   }
 
-  if (!rand) return env.ASSETS.fetch(request);
+  if (!rand) return staticPage; // 404 prietenos
 
   let surse = [];
   try {
@@ -87,8 +91,8 @@ export async function onRequest(context) {
         .join('\n      ')}
     </section>
     <p class="reader-legal">
-      Articolul din arhivă aparține surselor originale, menționate mai sus;
-      aici este reprodus parțial, fără publicitate, pentru o lectură liniștită.
+      Acest subiect provine din arhiva site-ului (păstrată un an). Articolele
+      integrale aparțin surselor originale, menționate mai jos.
     </p>
   </article>
 </main>
@@ -107,7 +111,7 @@ export async function onRequest(context) {
   return new Response(html, {
     headers: {
       'content-type': 'text/html;charset=utf-8',
-      'cache-control': 'public, max-age=600',
+      'cache-control': 'public, max-age=3600',
     },
   });
 }
