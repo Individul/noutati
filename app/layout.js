@@ -55,8 +55,8 @@ export default function RootLayout({ children }) {
               automat la fiecare 15 minute.
             </p>
             <div className="footer-sources">
-              Unimedia · Ziarul de Gardă · Realitatea.md · Tribuna.md ·
-              Kapital.md · Jurnal.md · Observatorul
+              Unimedia · Point.md · Ziarul de Gardă · Realitatea.md ·
+              Tribuna.md · Kapital.md · Jurnal.md · Observatorul
               <br />
               Știrile externe sunt preluate din secțiunile „extern" ale
               surselor moldovenești.
