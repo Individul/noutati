@@ -1,0 +1,12 @@
+name = "noutati"
+pages_build_output_dir = "out"
+compatibility_date = "2026-09-01"
+
+# Arhiva de subiecte (1 an). Baza se creează o singură dată:
+#   npx wrangler d1 create noutati-arhiva
+#   npx wrangler d1 execute noutati-arhiva --remote --file=schema.sql
+# și completează mai jos database_id cu valoarea afișată de wrangler.
+[[d1_databases]]
+binding = "DB"
+database_name = "noutati-arhiva"
+database_id = "DE-COMPLETAT"

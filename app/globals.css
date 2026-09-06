@@ -1,0 +1,545 @@
+:root {
+  --paper: #fbfaf7;
+  --ink: #06001a;
+  --muted: #736e7e;
+  --hairline: #e6e2d9;
+  --accent: #c8102e;
+  --maxw: 660px;
+  --serif: Georgia, 'Iowan Old Style', 'Times New Roman', Times, serif;
+  --sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.container {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 22px;
+}
+
+/* ——— Masthead ——— */
+
+.masthead {
+  text-align: center;
+  padding: 46px 0 0;
+}
+
+.masthead .brand {
+  font-family: var(--serif);
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.brand-dot {
+  color: var(--accent);
+}
+
+.tagline {
+  margin: 10px 0 0;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--muted);
+}
+
+.nav {
+  margin-top: 26px;
+  border-top: 1px solid var(--hairline);
+  border-bottom: 2px solid var(--ink);
+}
+
+.nav-in {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px 22px;
+  padding-top: 12px;
+  padding-bottom: 14px;
+}
+
+.nav a {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  transition: color 0.15s;
+}
+
+.nav a:hover {
+  color: var(--ink);
+}
+
+/* ——— Stripă de actualizare ——— */
+
+.updated {
+  text-align: center;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  padding: 22px 0 4px;
+}
+
+.updated::before {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22a06b;
+  margin-right: 9px;
+  vertical-align: 1px;
+  animation: pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* ——— Șirea principală (lead) ——— */
+
+.lead {
+  display: block;
+  padding: 30px 0 30px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.kicker {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+}
+
+.lead-title {
+  margin: 10px 0 12px;
+  font-family: var(--serif);
+  font-size: 31px;
+  line-height: 1.16;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.lead:hover .lead-title {
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+
+.lead-sum {
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+/* ——— Rânduri de articole ——— */
+
+.art {
+  display: block;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.art-title {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 19.5px;
+  line-height: 1.26;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+}
+
+.art:hover .art-title {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.art-sum {
+  margin: 7px 0 0;
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.art-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 14px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.art-left {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+}
+
+.theme {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.art-src {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.surse-n {
+  color: var(--accent);
+}
+
+/* variantă compactă pentru teme */
+
+.art-mica .art-title {
+  font-size: 17px;
+  line-height: 1.3;
+}
+
+.art-mica {
+  padding: 15px 0;
+}
+
+.art-mica .art-meta {
+  margin-top: 5px;
+}
+
+/* ——— Secțiuni ——— */
+
+.section {
+  margin-top: 44px;
+}
+
+.sec-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-top: 2px solid var(--ink);
+  padding-top: 10px;
+  margin-bottom: 4px;
+}
+
+.sec-head h2 {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+
+.sec-more {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.sec-more:hover {
+  text-decoration: underline;
+}
+
+/* ——— Antet pagină de secțiune ——— */
+
+.page-head {
+  margin-top: 40px;
+  border-top: 2px solid var(--ink);
+  padding-top: 14px;
+}
+
+.page-head h1 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+.page-head p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.page-head .kicker {
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* ——— Pagina de citire ——— */
+
+.reader {
+  padding-top: 34px;
+}
+
+.reader-back {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+  margin-bottom: 26px;
+}
+
+.reader-back:hover {
+  color: var(--ink);
+}
+
+.reader .kicker {
+  display: block;
+  text-align: center;
+}
+
+.reader-title {
+  margin: 14px auto 18px;
+  font-family: var(--serif);
+  font-size: 30px;
+  line-height: 1.18;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-align: center;
+  max-width: 560px;
+}
+
+.reader-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--muted);
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+  padding: 10px 0;
+  margin-bottom: 30px;
+}
+
+.reader-src {
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.reader-src:hover {
+  text-decoration: underline;
+}
+
+.ai-tag {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 1px 8px;
+  white-space: nowrap;
+}
+
+.reader-ai-linie {
+  margin-bottom: 14px;
+}
+
+/* ——— Starea „se generează sumarul" (streaming) ——— */
+
+.generare {
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.puls {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-right: 8px;
+  vertical-align: 1px;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.reader-body p {
+  margin: 0 0 18px;
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.reader-notice {
+  border: 1px solid var(--hairline);
+  background: #f3f1ea;
+  padding: 16px 18px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 26px 0 0;
+}
+
+.reader-notice p {
+  margin: 0 0 8px;
+}
+
+.reader-notice p:last-child {
+  margin: 0;
+}
+
+.reader-notice a {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.reader-legal {
+  margin: 26px 0 0;
+  font-size: 11.5px;
+  color: var(--muted);
+  opacity: 0.75;
+  text-align: center;
+}
+
+/* ——— Sursele subiectului ——— */
+
+.surse {
+  margin-top: 44px;
+}
+
+.sursa {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.sursa-title {
+  font-size: 14.5px;
+  line-height: 1.4;
+  color: var(--muted);
+  transition: color 0.15s;
+}
+
+.sursa:hover .sursa-title {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.sursa-meta {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ——— Gol ——— */
+
+.gol {
+  padding: 34px 0;
+  color: var(--muted);
+  font-size: 14px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+/* ——— Footer ——— */
+
+.footer {
+  margin-top: 64px;
+  border-top: 2px solid var(--ink);
+  padding: 26px 0 60px;
+}
+
+.footer-brand {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 17px;
+  margin: 0 0 10px;
+  text-align: center;
+}
+
+.footer-text {
+  margin: 0 auto 14px;
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--muted);
+  text-align: center;
+  max-width: 480px;
+}
+
+.footer-sources {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  letter-spacing: 0.04em;
+  line-height: 1.8;
+  opacity: 0.75;
+}
+
+/* ——— Responsiv ——— */
+
+@media (max-width: 620px) {
+  .masthead {
+    padding-top: 34px;
+  }
+  .masthead .brand {
+    font-size: 32px;
+  }
+  .lead-title {
+    font-size: 25px;
+  }
+  .page-head h1 {
+    font-size: 26px;
+  }
+  .nav {
+    gap: 2px 16px;
+  }
+}

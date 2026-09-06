@@ -1,0 +1,12 @@
+node_modules/
+.next/
+out/
+.env*.local
+*.log
+.DS_Store
+.sumar-cache.json
+.date-corectii.json
+.pagini-vechi/
+.subiecte-build.jsonl
+insereaza.sql
+.wrangler/

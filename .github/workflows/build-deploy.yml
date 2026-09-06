@@ -1,0 +1,82 @@
+# Build + publicare pe Cloudflare Pages.
+# Rulează:
+#   - automat la fiecare 20 de minute (știrile proaspete)
+#   - la fiecare push în main (modificări de cod)
+#   - manual din tabul Actions („Run workflow")
+#
+# Configurare o singură dată — Secrets în repo (Settings → Secrets and variables → Actions):
+#   CLOUDFLARE_API_TOKEN   — token Cloudflare cu permisiunea „Cloudflare Pages: Edit"
+#                            (se creează pe dash.cloudflare.com → My Profile → API Tokens)
+#   CLOUDFLARE_ACCOUNT_ID  — Account ID (dash.cloudflare.com — pagina de start, dreapta)
+#   AI_API_KEY             — cheia GLM/Z.AI (aceeași din .env.local)
+#   AI_BASE_URL            — (opțional) implicit https://api.z.ai/api/coding/paas/v4
+#   AI_MODEL               — (opțional) implicit glm-5.3
+#
+# Notă: pe repo privat, Actions are 2000 min/lună gratuite — la un build de ~5 min
+# este de ajuns până la ~6 builduri/zi; pe repo public, Actions e nelimitat.
+
+name: Build și publicare
+
+on:
+  schedule:
+    - cron: '*/20 * * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # sumarele GLM, corecțiile de dată și arhiva de pagini vechi se
+      # moștenesc între builduri: GLM se plătește doar pentru subiectele noi,
+      # iar linkurile partajate trăiesc cel puțin o săptămână
+      - name: Restaurează cache-urile
+        uses: actions/cache@v4
+        with:
+          path: |
+            .sumar-cache.json
+            .date-corectii.json
+            .pagini-vechi
+          key: cache-stiri-${{ github.run_id }}
+          restore-keys: |
+            cache-stiri-
+
+      - name: Instalează dependențele
+        run: npm ci
+
+      - name: Build static (colectare știri + sumare GLM)
+        run: npm run build
+        env:
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
+          AI_BASE_URL: ${{ secrets.AI_BASE_URL }}
+          AI_MODEL: ${{ secrets.AI_MODEL }}
+
+      - name: Arhivează paginile și restituie paginile vechi
+        run: |
+          node scripts/pagini-vechi.js arhiveaza
+          node scripts/pagini-vechi.js restituie
+
+      # arhiva pe 1 an: subiectele intră în baza D1, iar /stire/[id] se
+      # servește de funcția Cloudflare din arhivă, inclusiv după rotire
+      - name: Încarcă subiectele în arhiva D1
+        run: |
+          rm -f insereaza.sql
+          node scripts/genereaza-insereaza.mjs
+          npx wrangler d1 execute noutati-arhiva --remote -y --file=insereaza.sql
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Publică pe Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy out --project-name=noutati
