@@ -27,7 +27,15 @@ for (const [cheie, zile] of Object.entries(FERESTRE)) {
     .filter((r) => r.ts * 1000 >= limita && r.titlu && r.n > 0)
     .sort((a, b) => b.n - a.n || b.ts - a.ts)
     .slice(0, TOP)
-    .map((r) => ({ id: r.id, titlu: r.titlu, tema: r.tema, ts: r.ts, n: r.n }));
+    .map((r) => {
+      let linkuri = [];
+      try {
+        linkuri = (JSON.parse(r.surse || '[]') || []).map((s) => s.link).filter(Boolean);
+      } catch {
+        linkuri = [];
+      }
+      return { id: r.id, titlu: r.titlu, tema: r.tema, ts: r.ts, n: r.n, linkuri };
+    });
 }
 
 fs.writeFileSync(FISIER_IESIRE, JSON.stringify(populare));

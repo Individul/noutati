@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { timeAgo } from '@/lib/format';
 
 const TABURI = [
   { cheie: '48h', label: '48 ore' },
@@ -9,32 +8,12 @@ const TABURI = [
   { cheie: '30z', label: '30 zile' },
 ];
 
-const normalizeazaTitlu = (s) =>
-  (s || '')
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9 ]+/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-
 // Panoul din dreapta: subiectele cele mai acoperite (cele mai multe surse)
-// în fereastra de timp selectată. Datele sunt precalculate la build.
-export default function PanouPopular({ populare, leadId, leadTitlu }) {
+// în fereastra de timp selectată. Datele sunt precalculate la build
+// (filtrarea lead-ului s-a făcut deja în pagina principală).
+export default function PanouPopular({ populare }) {
   const [activ, setActive] = useState('48h');
-  // lead-ul se exclude temeinic: după id ȘI după titlul normalizat
-  // (id-ul clusterului se poate schimba între builduri)
-  const leadTitluNorm = (leadTitlu || '')
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase();
-  const lista = (populare[activ] || [])
-    .filter(
-      (r) =>
-        r.id !== leadId &&
-        normalizeazaTitlu(r.titlu) !== leadTitluNorm
-    )
-    .slice(0, 8);
+  const lista = populare[activ] || [];
 
   return (
     <aside className="panou-popular">
@@ -64,7 +43,7 @@ export default function PanouPopular({ populare, leadId, leadTitlu }) {
                 <span className="pop-titlu">{r.titlu}</span>
                 <span className="pop-meta">
                   {r.n} {r.n === 1 ? 'sursă' : 'surse'} ·{' '}
-                  <span data-timp>{timeAgo(r.ts)}</span>
+                  <span data-timp>{timeAgoLabel(r.ts)}</span>
                 </span>
               </span>
             </a>
@@ -74,4 +53,21 @@ export default function PanouPopular({ populare, leadId, leadTitlu }) {
       </ol>
     </aside>
   );
+}
+
+function timeAgoLabel(ts) {
+  const diffMin = Math.round((Date.now() - ts) / 60000);
+  if (diffMin < 1) return 'chiar acum';
+  if (diffMin < 60) return `acum ${diffMin} min`;
+  const h = Math.floor(diffMin / 60);
+  if (h === 1) return 'acum o oră';
+  if (h < 24) return `acum ${h} ore`;
+  const zile = Math.floor(h / 24);
+  if (zile === 1) return 'ieri';
+  if (zile < 7) return `acum ${zile} zile`;
+  return new Date(ts).toLocaleDateString('ro-RO', {
+    day: 'numeric',
+    month: 'short',
+    timeZone: 'Europe/Chisinau',
+  });
 }
