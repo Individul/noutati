@@ -14,3 +14,5 @@ insereaza.sql
 .test-ids.json
 .text-cache.json
 .diag.json
+.popular.json
+.d1-raw.json

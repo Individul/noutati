@@ -34,9 +34,122 @@ a {
 }
 
 .container {
-  max-width: var(--maxw);
+  max-width: 660px;
   margin: 0 auto;
-  padding: 0 22px;
+  padding: 0 20px;
+}
+
+.container-larg {
+  max-width: 1080px;
+}
+
+/* ——— Prima pagină: flux + panou popular ——— */
+
+.home-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 48px;
+  align-items: start;
+}
+
+.panou-popular {
+  border-top: 2px solid var(--ink);
+  padding-top: 10px;
+  position: sticky;
+  top: 24px;
+}
+
+.taburi {
+  display: flex;
+  gap: 6px;
+  margin: 12px 0 6px;
+}
+
+.tab {
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.tab:hover {
+  border-color: var(--muted);
+}
+
+.tab.activ {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.popular-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.popular-lista li {
+  border-bottom: 1px solid var(--hairline);
+}
+
+.popular-lista a {
+  display: flex;
+  gap: 12px;
+  padding: 11px 0;
+}
+
+.popular-lista a:hover .pop-titlu {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.pop-rank {
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--accent);
+  min-width: 20px;
+  line-height: 1.2;
+}
+
+.pop-corp {
+  flex: 1;
+  min-width: 0;
+}
+
+.pop-titlu {
+  display: block;
+  font-size: 13.5px;
+  line-height: 1.4;
+}
+
+.pop-meta {
+  display: block;
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+.pop-gol {
+  color: var(--muted);
+  font-size: 13px;
+  padding: 12px 0;
+}
+
+@media (max-width: 1000px) {
+  .home-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .panou-popular {
+    position: static;
+    margin-top: 44px;
+  }
 }
 
 /* ——— Masthead ——— */

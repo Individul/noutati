@@ -1,8 +1,18 @@
+import fs from 'fs';
 import { getNewsDupaRegiune } from '@/lib/news';
 import { LEAD_FEREASTRA_ORE } from '@/lib/config';
 import { dataLunga } from '@/lib/format';
 import LeadStory from '@/components/LeadStory';
 import ArticleRow from '@/components/ArticleRow';
+import PanouPopular from '@/components/PanouPopular';
+
+function citestePopulare() {
+  try {
+    return JSON.parse(fs.readFileSync('.popular.json', 'utf8'));
+  } catch {
+    return null;
+  }
+}
 
 export default async function Acasa() {
   const { moldova, extern } = await getNewsDupaRegiune();
@@ -24,17 +34,23 @@ export default async function Acasa() {
   // flux cronologic unic: toate știrile rămase, în ordinea publicării
   const flux = toate.filter((i) => i.id !== lead?.id).slice(0, 50);
 
+  const populare = citestePopulare();
+
   return (
-    <main className="container">
-      <div className="updated">Actualizat automat · {dataLunga(Date.now())}</div>
+    <main className="container container-larg home-grid">
+      <div className="home-main">
+        <div className="updated">Actualizat automat · {dataLunga(Date.now())}</div>
 
-      {lead && <LeadStory item={lead} />}
+        {lead && <LeadStory item={lead} />}
 
-      <div>
-        {flux.map((item) => (
-          <ArticleRow key={item.id} item={item} />
-        ))}
+        <div>
+          {flux.map((item) => (
+            <ArticleRow key={item.id} item={item} />
+          ))}
+        </div>
       </div>
+
+      {populare && <PanouPopular populare={populare} leadId={lead?.id} />}
     </main>
   );
 }

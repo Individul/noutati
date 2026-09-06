@@ -52,6 +52,15 @@ jobs:
       - name: Instalează dependențele
         run: npm ci
 
+      # panoul „Cele mai populare": datele vin din arhiva D1 la fiecare build
+      - name: Extrage subiectele populare din D1
+        run: |
+          npx wrangler d1 execute noutati-arhiva --remote -y --json --command "SELECT id, titlu, tema, ts, json_array_length(surse) AS n FROM subiecte WHERE ts > unixepoch() - 31*86400 ORDER BY n DESC" > .d1-raw.json
+          node scripts/genereaza-popular.mjs
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
       - name: Build static (colectare știri + sumare GLM)
         run: npm run build
         env:
