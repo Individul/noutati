@@ -73,6 +73,7 @@ export default function RootLayout({ children }) {
             </div>
           </div>
         </footer>
+        <script src="/timp-live.js" defer />
       </body>
     </html>
   );

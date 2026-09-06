@@ -76,13 +76,13 @@ export async function onRequest(context) {
         const sursaText = r.sumar || r.text || r.rezumat || '';
         const fragmentText = fragment(sursaText, cuvinte);
         const titlu = fragment(r.titlu, cuvinte) || esc(r.titlu);
-        return `<a class="art" href="/stire/${esc(r.id)}">
+        return `<a class="art" href="/stire/${esc(r.id)}" data-ts="${Number(r.ts) || Date.now()}">
         <h3 class="art-title">${titlu}</h3>
         ${fragmentText ? `<p class="art-sum">${fragmentText}</p>` : ''}
         <div class="art-meta">
           <span class="art-left">
             <span class="theme">${esc(r.tema || '')}</span>
-            <span>${timeAgo(Number(r.ts) || Date.now())}</span>
+            <span data-timp>${timeAgo(Number(r.ts) || Date.now())}</span>
           </span>
           <span class="art-src">${esc(r.regiune === 'moldova' ? 'Moldova' : 'Extern')}</span>
         </div>
@@ -110,6 +110,7 @@ export async function onRequest(context) {
 <meta name="robots" content="noindex">
 <title>${qBrut ? `Căutare: ${esc(qBrut)}` : 'Caută în știri'} | Noutăți.md</title>
 <link rel="stylesheet" href="/arhiva.css">
+<script src="/timp-live.js" defer></script>
 </head>
 <body>
 <header class="masthead">

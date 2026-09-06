@@ -47,6 +47,7 @@ export async function onRequest(context) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(rand.titlu)} | Noutăți.md</title>
 <link rel="stylesheet" href="/arhiva.css">
+<script src="/timp-live.js" defer></script>
 </head>
 <body>
 <header class="masthead">
@@ -72,8 +73,8 @@ export async function onRequest(context) {
     <a class="reader-back" href="/">← prima pagină</a>
     <span class="kicker">${esc(rand.tema)}</span>
     <h1 class="reader-title">${esc(rand.titlu)}</h1>
-    <div class="reader-meta">
-      <span>${esc(rand.regiune === 'moldova' ? 'Moldova' : 'Extern')} · ${timeAgo(ts)} · ${dataLunga(ts)}</span>
+    <div class="reader-meta" data-ts="${ts}">
+      <span>${esc(rand.regiune === 'moldova' ? 'Moldova' : 'Extern')} · <span data-timp>${timeAgo(ts)}</span> · ${dataLunga(ts)}</span>
       <span class="ai-tag">din arhivă</span>
     </div>
     <div class="reader-body">
@@ -83,9 +84,9 @@ export async function onRequest(context) {
       <div class="sec-head"><h2>Sursele subiectului</h2></div>
       ${surse
         .map(
-          (s) => `<a class="sursa" href="${esc(s.link)}" target="_blank" rel="noopener noreferrer">
+          (s) => `<a class="sursa" href="${esc(s.link)}" target="_blank" rel="noopener noreferrer" data-ts="${Number(s.ts) || ts}">
         <span class="sursa-title">${esc(s.title)}</span>
-        <span class="sursa-meta">${esc(s.source?.name || '')} · ${timeAgo(Number(s.ts) || ts)}</span>
+        <span class="sursa-meta">${esc(s.source?.name || '')} · <span data-timp>${timeAgo(Number(s.ts) || ts)}</span></span>
       </a>`
         )
         .join('\n      ')}
