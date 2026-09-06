@@ -66,7 +66,7 @@ export default function RootLayout({ children }) {
             </p>
             <div className="footer-sources">
               Unimedia · Point.md · Ziarul de Gardă · Realitatea.md ·
-              Tribuna.md · Kapital.md · Jurnal.md · Observatorul
+              Tribuna.md · Kapital.md · Jurnal.md · Observatorul · TVR Moldova
               <br />
               Știrile externe sunt preluate din secțiunile „extern" ale
               surselor moldovenești.

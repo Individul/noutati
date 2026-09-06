@@ -61,6 +61,14 @@ endpoint `/api/coding/paas/v4`; platforma normală folosește
 `gemini-2.0-flash`), Groq (gratuit: `https://api.groq.com/openai/v1` +
 `llama-3.3-70b-versatile`).
 
+## Căutare
+
+Căsuța din header caută în **titluri, sumare, textul extras al articolelor și
+rezumate** — din arhiva D1. Căutarea ignoră diacriticele („vant" găsește
+„vânt"), acceptă mai multe cuvinte (toate trebuie să apară) și ordonează
+rezultatele după prospătime, cu fragmente evidențiate. Textul căutabil se
+construiește la fiecare build în coloana `cautare`.
+
 ## Rulare locală
 
 ```bash
