@@ -58,7 +58,8 @@ export default function RootLayout({ children }) {
               Unimedia · Ziarul de Gardă · Realitatea.md · Tribuna.md ·
               Kapital.md · Jurnal.md · Observatorul
               <br />
-              Digi24 · Știrile ProTV · Adevărul · G4Media · DC News · Mediafax
+              Știrile externe sunt preluate din secțiunile „extern" ale
+              surselor moldovenești.
             </div>
           </div>
         </footer>

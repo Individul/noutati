@@ -10,3 +10,4 @@ out/
 .subiecte-build.jsonl
 insereaza.sql
 .wrangler/
+.cf-token.txt
