@@ -1,4 +1,3 @@
-import { Suspense } from 'react';
 import fs from 'fs';
 import { getNews, corecteazaData } from '@/lib/news';
 import { getArticol } from '@/lib/article';
@@ -29,71 +28,8 @@ export default async function PaginaStire({ params }) {
   const subiect = subiecte.find((i) => i.id === id);
   if (!subiect) notFound();
 
-  return (
-    <main className="container">
-      <article className="reader">
-        <a className="reader-back" href="/">
-          ← prima pagină
-        </a>
-
-        <span className="kicker">{subiect.themeLabel}</span>
-        <h1 className="reader-title">{subiect.title}</h1>
-
-        <div className="reader-meta">
-          <span>
-            {subiect.count > 1 ? `${subiect.count} surse` : subiect.source.name}{' '}
-            · {timeAgo(subiect.ts)} · {dataLunga(subiect.ts)}
-          </span>
-        </div>
-
-        {/* Sumarul (extragere + AI) se livrează în surge: pagina se
-            deschide instant, textul apare imediat după generare. */}
-        <Suspense fallback={<SumarInAsteptare subiect={subiect} />}>
-          <SumarSubiect subiect={subiect} />
-        </Suspense>
-
-        <section className="surse">
-          <div className="sec-head">
-            <h2>Sursele subiectului</h2>
-          </div>
-          {subiect.members.map((m, idx) => (
-            <a
-              key={idx}
-              className="sursa"
-              href={m.link}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span className="sursa-title">{m.title}</span>
-              <span className="sursa-meta">
-                {m.source.name} · {timeAgo(m.ts)}
-              </span>
-            </a>
-          ))}
-        </section>
-      </article>
-    </main>
-  );
-}
-
-// Fallback-ul afișat instant, cât timp lucrează extragerea + GLM.
-function SumarInAsteptare({ subiect }) {
-  return (
-    <div className="sumar-asteptare">
-      {subiect.summary ? (
-        <div className="reader-body">
-          <p>{subiect.summary}</p>
-        </div>
-      ) : null}
-      <p className="generare">
-        <span className="puls" /> se generează sumarul complet…
-      </p>
-    </div>
-  );
-}
-
-// Componenta lentă (extragere + GLM), livrată prin streaming.
-async function SumarSubiect({ subiect }) {
+  // Extragerea textelor surselor din grup (paralel, maximum 4 surse) —
+  // înainte de randare, ca data corectată să apară în meta.
   const primele = subiect.members.slice(0, 4);
   const extrase = await Promise.all(primele.map((m) => getArticol(m.link)));
 
@@ -140,49 +76,82 @@ async function SumarSubiect({ subiect }) {
   }
 
   return (
-    <>
-      {ai.ok && (
-        <div className="reader-ai-linie">
-          <span className="ai-tag">sumar automat</span>
+    <main className="container">
+      <article className="reader">
+        <a className="reader-back" href="/">
+          ← prima pagină
+        </a>
+
+        <span className="kicker">{subiect.themeLabel}</span>
+        <h1 className="reader-title">{subiect.title}</h1>
+
+        <div className="reader-meta">
+          <span>
+            {subiect.count > 1 ? `${subiect.count} surse` : subiect.source.name}{' '}
+            · {timeAgo(subiect.ts)} · {dataLunga(subiect.ts)}
+          </span>
+          {ai.ok && <span className="ai-tag">sumar automat</span>}
         </div>
-      )}
-      {ai.ok ? (
-        <div className="reader-body">
-          {ai.text
-            .split(/\n{2,}/)
-            .filter((p) => p.trim())
-            .map((p, idx) => (
-              <p key={idx}>{p.trim()}</p>
-            ))}
-        </div>
-      ) : textRezerva ? (
-        <>
+
+        {ai.ok ? (
           <div className="reader-body">
-            {textRezerva.map((p, idx) => (
-              <p key={idx}>{p}</p>
-            ))}
+            {ai.text
+              .split(/\n{2,}/)
+              .filter((p) => p.trim())
+              .map((p, idx) => (
+                <p key={idx}>{p.trim()}</p>
+              ))}
           </div>
-          {trunchiat && (
-            <div className="reader-notice">
-              Fragment din textul sursei {sursaText}. Continuarea — la
-              publicațiile de mai jos.
+        ) : textRezerva ? (
+          <>
+            <div className="reader-body">
+              {textRezerva.map((p, idx) => (
+                <p key={idx}>{p}</p>
+              ))}
             </div>
-          )}
-        </>
-      ) : subiect.summary ? (
-        <div className="reader-body">
-          <p>{subiect.summary}</p>
-        </div>
-      ) : (
-        <div className="reader-notice">
-          Subiectul este acoperit de publicațiile de mai jos.
-        </div>
-      )}
-      <p className="reader-legal">
-        {ai.ok
-          ? 'Sumarul este generat automat de un sistem AI pe baza articolelor de la sursele de mai jos; articolele integrale aparțin în totalitate surselor originale.'
-          : 'Textul de mai sus este preluat parțial din articolele surselor originale, menționate mai jos; aici apar fără publicitate, pentru o lectură liniștită.'}
-      </p>
-    </>
+            {trunchiat && (
+              <div className="reader-notice">
+                Fragment din textul sursei {sursaText}. Continuarea — la
+                publicațiile de mai jos.
+              </div>
+            )}
+          </>
+        ) : subiect.summary ? (
+          <div className="reader-body">
+            <p>{subiect.summary}</p>
+          </div>
+        ) : (
+          <div className="reader-notice">
+            Subiectul este acoperit de publicațiile de mai jos.
+          </div>
+        )}
+
+        <section className="surse">
+          <div className="sec-head">
+            <h2>Sursele subiectului</h2>
+          </div>
+          {subiect.members.map((m, idx) => (
+            <a
+              key={idx}
+              className="sursa"
+              href={m.link}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span className="sursa-title">{m.title}</span>
+              <span className="sursa-meta">
+                {m.source.name} · {timeAgo(m.ts)}
+              </span>
+            </a>
+          ))}
+        </section>
+
+        <p className="reader-legal">
+          {ai.ok
+            ? 'Sumarul este generat automat de un sistem AI pe baza articolelor de la sursele de mai jos; articolele integrale aparțin în totalitate surselor originale.'
+            : 'Textul de mai sus este preluat parțial din articolele surselor originale, menționate mai jos; aici apar fără publicitate, pentru o lectură liniștită.'}
+        </p>
+      </article>
+    </main>
   );
 }
