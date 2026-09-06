@@ -32,7 +32,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       # sumarele GLM, corecțiile de dată și arhiva de pagini vechi se
       # moștenesc între builduri: GLM se plătește doar pentru subiectele noi,
