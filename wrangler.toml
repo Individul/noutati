@@ -9,4 +9,4 @@ compatibility_date = "2026-09-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "noutati-arhiva"
-database_id = "DE-COMPLETAT"
+database_id = "f28b7f38-c570-44e6-8461-77124e2691dc"
