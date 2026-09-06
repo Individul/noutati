@@ -33,8 +33,17 @@ if (fs.existsSync(FISIER_INTRARE)) {
       const o = JSON.parse(linie);
       if (!o.id || !o.titlu) continue;
       stmts.push(
-        `INSERT OR IGNORE INTO subiecte (id, titlu, sumar, text, rezumat, tema, regiune, ts, surse, creat)
-VALUES (${esc(o.id)}, ${esc(o.titlu)}, ${esc(o.sumar)}, ${esc(o.text)}, ${esc(o.rezumat)}, ${esc(o.tema)}, ${esc(o.regiune)}, ${o.ts}, ${esc(JSON.stringify(o.surse))}, unixepoch());`
+        `INSERT INTO subiecte (id, titlu, sumar, text, rezumat, tema, regiune, ts, surse, creat)
+VALUES (${esc(o.id)}, ${esc(o.titlu)}, ${esc(o.sumar)}, ${esc(o.text)}, ${esc(o.rezumat)}, ${esc(o.tema)}, ${esc(o.regiune)}, ${o.ts}, ${esc(JSON.stringify(o.surse))}, unixepoch())
+ON CONFLICT(id) DO UPDATE SET
+  titlu = excluded.titlu,
+  sumar = excluded.sumar,
+  text = excluded.text,
+  rezumat = excluded.rezumat,
+  tema = excluded.tema,
+  regiune = excluded.regiune,
+  ts = excluded.ts,
+  surse = excluded.surse;`
       );
     } catch {
       // linie incompletă — o sărim
