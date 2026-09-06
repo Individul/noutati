@@ -11,3 +11,4 @@ out/
 insereaza.sql
 .wrangler/
 .cf-token.txt
+.test-ids.json

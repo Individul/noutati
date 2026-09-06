@@ -25,6 +25,16 @@ export default function RootLayout({ children }) {
               <span className="brand-dot">.</span>
             </a>
             <p className="tagline">{SITE.tagline}</p>
+            <form className="cauta" action="/cauta" method="get">
+              <input
+                type="search"
+                name="q"
+                placeholder="caută în știri…"
+                maxLength={80}
+                aria-label="Caută în știri"
+              />
+              <button type="submit">caută</button>
+            </form>
           </div>
           <nav className="nav">
             <div className="container nav-in">

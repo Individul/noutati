@@ -11,5 +11,6 @@ CREATE TABLE IF NOT EXISTS subiecte (
   regiune TEXT,
   ts      INTEGER,
   surse   TEXT,
+  cautare TEXT,
   creat   INTEGER DEFAULT (unixepoch())
 );
